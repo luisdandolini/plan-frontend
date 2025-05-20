@@ -2,8 +2,20 @@ import CountryDetails from '@/components/CountryDetails';
 import { fetchCountryByCode } from '@/lib/api';
 import { notFound } from 'next/navigation';
 
-export default async function CountryPage({ params }: { params: { code: string } }) {
-  const country = await fetchCountryByCode(params.code);
+type Props = {
+  params: Promise<{ code: string }>;
+};
+
+export default async function CountryPage({ params }: Props) {
+  const { code } = await params;
+
+  const country = await fetchCountryByCode(code);
+
   if (!country) notFound();
-  return <CountryDetails country={country} />;
+
+  return (
+    <div className="flex justify-center items-center">
+      <CountryDetails country={country} />
+    </div>
+  );
 }
