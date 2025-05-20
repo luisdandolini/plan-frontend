@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { fetchCountries, Country } from '@/lib/api';
 import { useCountryFilters } from '@/store/countryFilters';
-import CountryCard from '@/components/layout/CountryCard';
+import CountryCard from '@/components/CountryCard';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import LoadingSpinner from '@/components/ui/Loading';
 
@@ -85,7 +85,7 @@ export default function Home() {
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-x-6 gap-y-8">
           {currentCountries.map((country) => (
             <CountryCard
               key={country.cca2}
@@ -100,7 +100,7 @@ export default function Home() {
       )}
 
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-3 mt-10">
+        <div className="flex flex-wrap justify-center items-center gap-3 mt-10">
           <button
             className="w-[50px] h-[50px] cursor-pointer border-[3px] border-white rounded-[20px] text-white disabled:opacity-50 flex items-center justify-center"
             onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}

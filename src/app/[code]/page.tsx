@@ -1,4 +1,4 @@
-import CountryDetails from '@/components/layout/CountryDetails';
+import CountryDetails from '@/components/CountryDetails';
 import { fetchCountryByCode } from '@/lib/api';
 import { notFound } from 'next/navigation';
 
