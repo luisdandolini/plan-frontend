@@ -8,8 +8,10 @@ import oceania from '@/assets/oceania.webp';
 import capitalIcon from '@/assets/capital.webp';
 import Button from '@/components/ui/Button';
 import * as Tooltip from '@radix-ui/react-tooltip';
+import Link from 'next/link';
 
 interface CountryCardProps {
+  code: string;
   country: string;
   region: string;
   capital: string | undefined;
@@ -34,7 +36,7 @@ const regionImageMap: Record<string, StaticImageData> = {
   Antarctic: antarctic,
 };
 
-export default function CountryCard({ country, region, capital, flag }: CountryCardProps) {
+export default function CountryCard({ country, region, capital, flag, code }: CountryCardProps) {
   return (
     <div
       className="w-[310px] h-[258px] rounded-[20px]"
@@ -76,7 +78,9 @@ export default function CountryCard({ country, region, capital, flag }: CountryC
           <p className="text-[#707070] font-bold text-[18px]">{capital}</p>
         </div>
         <div className="w-full px-[20px]">
-          <Button className="w-full h-[47px]">Ver mais</Button>
+          <Link href={`/${code.toLowerCase()}`} tabIndex={-1}>
+            <Button className="w-full h-[47px]">Ver mais</Button>
+          </Link>
         </div>
       </div>
     </div>
