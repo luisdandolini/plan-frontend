@@ -1,23 +1,73 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { fetchCountries, Country } from '@/lib/api';
+import { useCountryFilters } from '@/store/countryFilters';
 import CountryCard from '@/components/layout/CountryCard';
-import { Country, fetchCountries } from '@/lib/api';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 const ITEMS_PER_PAGE = 8;
 
+const regionMap: Record<string, string> = {
+  Africa: 'África',
+  Americas: 'Américas',
+  Europe: 'Europa',
+  Asia: 'Ásia',
+  Oceania: 'Oceania',
+  Antarctic: 'Antártida',
+};
+
+const langPtToEn: Record<string, string> = {
+  Alemão: 'German',
+  Árabe: 'Arabic',
+  Bengali: 'Bengali',
+  Português: 'Portuguese',
+  Inglês: 'English',
+  Espanhol: 'Spanish',
+};
+
 export default function Home() {
+  const [allCountries, setAllCountries] = useState<Country[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [countries, setCountries] = useState<Country[]>([]);
 
-  useState(() => {
-    fetchCountries().then(setCountries);
-  });
+  const { search, language, regions, setLanguages } = useCountryFilters();
 
-  const totalPages = Math.ceil(countries.length / ITEMS_PER_PAGE);
+  useEffect(() => {
+    fetchCountries().then((data) => {
+      setAllCountries(data);
 
-  const currentCountries = countries.slice(
+      const unique = new Set<string>();
+      data.forEach((c) => c.languages && Object.values(c.languages).forEach((l) => unique.add(l)));
+
+      const list = ['Todos', ...Array.from(unique).sort()];
+      setLanguages(list);
+    });
+  }, [setLanguages]);
+
+  const filtered = useMemo(() => {
+    return allCountries.filter((c) => {
+      const regionPt = regionMap[c.region] ?? c.region;
+      if (regions.length && !regions.includes(regionPt)) return false;
+
+      if (language && language !== 'Todos') {
+        const target = (langPtToEn[language] ?? language).toLowerCase();
+        const langs = c.languages ? Object.values(c.languages).map((l) => l.toLowerCase()) : [];
+        if (!langs.includes(target)) return false;
+      }
+
+      const namePt = (c.translations?.por?.common ?? c.name.common).toLowerCase();
+      if (search && !namePt.includes(search.toLowerCase())) return false;
+
+      return true;
+    });
+  }, [allCountries, regions, language, search]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [regions, language, search]);
+
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  const currentCountries = filtered.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE,
   );
@@ -25,44 +75,46 @@ export default function Home() {
   return (
     <section className="px-6 py-10 mx-auto">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-8">
-        {currentCountries.map((country, index) => (
+        {currentCountries.map((country) => (
           <CountryCard
-            key={index}
-            country={country.translations?.por?.common || country.name.common}
-            region={country.region}
+            key={country.cca2}
+            country={country.translations?.por?.common ?? country.name.common}
+            region={regionMap[country.region] ?? country.region}
             capital={country.capital?.[0]}
             flag={country.flags.svg}
           />
         ))}
       </div>
 
-      <div className="flex justify-center items-center gap-3 mt-10">
-        <button
-          className="w-[50px] h-[50px] cursor-pointer border-[3px] border-white rounded-[20px] text-white font-bold disabled:opacity-50 flex flex-col items-center justify-center"
-          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          <MdKeyboardArrowLeft size={22} />
-        </button>
-
-        {Array.from({ length: totalPages }).map((_, i) => (
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-3 mt-10">
           <button
-            key={i}
-            onClick={() => setCurrentPage(i + 1)}
-            className={`w-3 h-3 rounded-full cursor-pointer ${
-              currentPage === i + 1 ? 'bg-white' : 'border-white border-[3px]'
-            }`}
-          />
-        ))}
+            className="w-[50px] h-[50px] cursor-pointer border-[3px] border-white rounded-[20px] text-white disabled:opacity-50 flex items-center justify-center"
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            <MdKeyboardArrowLeft size={22} />
+          </button>
 
-        <button
-          className="w-[50px] h-[50px] cursor-pointer border-[3px] border-white rounded-[20px] text-white font-bold disabled:opacity-50 flex flex-col items-center justify-center"
-          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-          disabled={currentPage === totalPages}
-        >
-          <MdKeyboardArrowRight size={22} />
-        </button>
-      </div>
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`w-3 h-3 rounded-full cursor-pointer ${
+                currentPage === i + 1 ? 'bg-white' : 'border-white border-[3px]'
+              }`}
+            />
+          ))}
+
+          <button
+            className="w-[50px] h-[50px] cursor-pointer border-[3px] border-white rounded-[20px] text-white disabled:opacity-50 flex items-center justify-center"
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            <MdKeyboardArrowRight size={22} />
+          </button>
+        </div>
+      )}
     </section>
   );
 }

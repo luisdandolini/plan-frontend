@@ -1,35 +1,18 @@
 'use client';
 
+import { useCountryFilters } from '@/store/countryFilters';
 import * as Select from '@radix-ui/react-select';
 import { FaChevronDown } from 'react-icons/fa';
 
-const languages = [
-  'Todos',
-  'Alemão',
-  'Aramaico',
-  'Árabe',
-  'Azerbaijão;',
-  'Argelino;',
-  'Asturiano;',
-  'Awadhi;',
-  'Bengali;',
-  'Bhojpuri;',
-  'Birmanês;',
-  'Búlgaro;',
-  'Bahasa Melayu;',
-  'Canarim',
-  'Checo',
-  'Coreano',
-  'Croata',
-  'Dinamarquês',
-  'Eslovaco',
-  'Esloveno',
-  'Estoniano',
-];
-
 export default function CustomSelect() {
+  const { language, languages, setLanguage } = useCountryFilters();
+
+  if (languages.length === 0) {
+    return <div className="w-[230px] h-[38px] rounded-full bg-white/40 animate-pulse" />;
+  }
+
   return (
-    <Select.Root>
+    <Select.Root value={language} onValueChange={setLanguage}>
       <Select.Trigger className="flex items-center justify-between w-full rounded-full border-[3px] border-white bg-transparent px-4 py-2 italic font-semibold focus:outline-none focus:ring-2 focus:ring-white">
         <Select.Value placeholder="Selecione o idioma" />
         <Select.Icon>
