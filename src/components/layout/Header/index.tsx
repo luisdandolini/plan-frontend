@@ -43,7 +43,7 @@ export default function Header() {
 
         {!code && (
           <div className="flex flex-col items-center lg:items-start gap-4 w-full">
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:justify-end">
+            <div className="flex flex-col justify-start items-center sm:flex-row gap-4 w-full">
               <Search />
               <CustomSelect />
             </div>

@@ -5,7 +5,7 @@ export default function Search() {
   const { search, setSearch } = useCountryFilters();
 
   return (
-    <div className="relative w-full max-w-md">
+    <div className="relative md:w-[420px] w-[360px] max-w-md">
       <input
         type="text"
         placeholder="Informe o país que deseja conhecer..."
