@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Exo } from 'next/font/google';
 import './globals.css';
+import Header from '@/components/layout/Header';
 
 const exo = Exo({
   subsets: ['latin'],
@@ -20,7 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${exo.variable} antialiased`}>{children}</body>
+      <body className={`${exo.variable} antialiased max-w-[1440px]`}>
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }

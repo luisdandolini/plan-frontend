@@ -2,4 +2,5 @@
 
 body {
   font-family: var(--font-exo);
+  background: linear-gradient(90deg, #faae2b, #f57c00);
 }

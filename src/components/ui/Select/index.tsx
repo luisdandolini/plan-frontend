@@ -30,7 +30,7 @@ const languages = [
 export default function CustomSelect() {
   return (
     <Select.Root>
-      <Select.Trigger className="flex items-center justify-between w-full max-w-xs rounded-full border-[3px] border-white bg-transparent px-4 py-2 italic font-semibold focus:outline-none focus:ring-2 focus:ring-white">
+      <Select.Trigger className="flex items-center justify-between w-full rounded-full border-[3px] border-white bg-transparent px-4 py-2 italic font-semibold focus:outline-none focus:ring-2 focus:ring-white">
         <Select.Value placeholder="Selecione o idioma" />
         <Select.Icon>
           <FaChevronDown className="text-white" />
