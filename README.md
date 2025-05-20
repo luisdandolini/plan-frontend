@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌍 Países do Mundo
 
-## Getting Started
+Aplicação web que lista todos os países do mundo, com informações completas, filtros e paginação. Desenvolvido com **Next.js**, **TypeScript**, **TailwindCSS**, consumo da **REST Countries API**, e gestão de estado com **Zustand**.
 
-First, run the development server:
+---
+
+## 🚀 Funcionalidades
+
+✅ Listagem de países com informações em **Português** (quando disponível).  
+✅ Filtros por **região** (checkbox), **idioma** (select) e **busca por nome** (input).  
+✅ Paginação com controle visual de páginas.  
+✅ Página de **detalhes do país** com informações como:
+
+- Nome oficial.
+- Capital.
+- População.
+- Moeda.
+- Idiomas.
+- Região e Sub-região.
+- Bandeira.
+
+✅ Tooltip para nomes longos.  
+✅ Responsivo para diferentes tamanhos de tela.  
+✅ Componente de **loading** durante o carregamento dos dados.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Next.js** (App Router)
+- **TypeScript**
+- **Tailwind CSS**
+- **Radix UI** (Select, Checkbox e Tooltip)
+- **REST Countries API v3.1**
+- **Zustand** (para filtros)
+
+---
+
+## ⚙️ Instalação e execução
 
 ```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/seu-repositorio.git
+
+# Acesse a pasta do projeto
+cd seu-repositorio
+
+# Instale as dependências
+npm install
+# ou
+yarn install
+
+# Execute o projeto
 npm run dev
-# or
+# ou
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔗 REST Countries API
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+O projeto consome dados da **REST Countries API v3.1**, buscando os seguintes campos:
 
-## Learn More
+- `name`
+- `translations`
+- `cca2`
+- `region`
+- `subregion`
+- `capital`
+- `flags`
+- `languages`
+- `population`
+- `currencies`
 
-To learn more about Next.js, take a look at the following resources:
+As informações são exibidas no idioma **Português**, utilizando o campo `translations.por` sempre que disponível.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📂 Estrutura de pastas
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```plaintext
+src/
+ ├── app/               # Páginas e rotas
+ ├── components/        # Componentes reutilizáveis
+ ├── lib/               # Funções de API (fetchCountries, fetchCountryByCode)
+ ├── store/             # Zustand - filtros globais
+ ├── assets/            # Imagens (bandeiras de regiões)
+ ├── styles/            # Tailwind config
+```
